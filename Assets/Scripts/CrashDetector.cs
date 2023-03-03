@@ -8,6 +8,7 @@ public class CrashDetector : MonoBehaviour
     private CircleCollider2D _playerHead;
     [SerializeField] private float reloadDelay = 0.5f;
     [SerializeField] private ParticleSystem crashEffect;
+    [SerializeField] private AudioClip crashSound;
 
     private void Start()
     {
@@ -20,6 +21,7 @@ public class CrashDetector : MonoBehaviour
         {
             Debug.Log("Ouch!");
             crashEffect.Play();
+            GetComponent<AudioSource>().PlayOneShot(crashSound);
             Invoke(nameof(ReloadScene), reloadDelay);
         }
     }
