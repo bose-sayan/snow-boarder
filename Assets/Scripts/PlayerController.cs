@@ -1,25 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float torqueAmount = 15f;
     [SerializeField] private float boostSpeed = 45f;
     [SerializeField] private float normalSpeed = 25f;
+    [SerializeField] bool canPlay;
     private Rigidbody2D _rb2D;
     private SurfaceEffector2D _surfaceEffector2D;
     
     private void Start()
     {
+        canPlay = true;
         _rb2D = GetComponent<Rigidbody2D>();
         _surfaceEffector2D = FindObjectOfType<SurfaceEffector2D>();
     }
 
     private void Update()
     {
-        RotatePlayer();
-        RespondToBoost();
+        if (canPlay)
+        {
+            RotatePlayer();
+            RespondToBoost();
+        }
+    }
+
+    public void DisableInput()
+    {
+        canPlay = false;
     }
 
     private void RespondToBoost()

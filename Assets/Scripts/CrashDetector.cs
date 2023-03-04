@@ -9,19 +9,23 @@ public class CrashDetector : MonoBehaviour
     [SerializeField] private float reloadDelay = 0.5f;
     [SerializeField] private ParticleSystem crashEffect;
     [SerializeField] private AudioClip crashSound;
+    [SerializeField] private bool hasCrashed;
 
     private void Start()
     {
         _playerHead = GetComponent<CircleCollider2D>();
+        hasCrashed = false;
     }
 
     private void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.CompareTag("Ground") && _playerHead.IsTouching(col.collider))
+        if (!hasCrashed && col.gameObject.CompareTag("Ground") && _playerHead.IsTouching(col.collider))
         {
             Debug.Log("Ouch!");
             crashEffect.Play();
             GetComponent<AudioSource>().PlayOneShot(crashSound);
+            GetComponent<PlayerController>().DisableInput();
+            hasCrashed = true;
             Invoke(nameof(ReloadScene), reloadDelay);
         }
     }
